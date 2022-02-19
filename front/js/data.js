@@ -9,7 +9,7 @@ export async function createArticles(pSection) {
         .then(resp => {
             resp.json()
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     data.forEach(elem => {
                         createArticle(pSection, elem.imageUrl, elem.altTxt, elem.name, elem.description, elem._id);
                     });
