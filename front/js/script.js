@@ -1,12 +1,12 @@
 /* LIBS */
-import { getArticles } from './data.js';
+import { createArticles } from './data.js';
 
 /* VARIABLES */
-const url = 'http://localhost:3000/api/products';
 
+/* Une fois la page charger lance la fonction d'initialisation*/
 window.addEventListener('load', initApp);
 
 function initApp() {
-    const lstArticles = getArticles(url);
-    console.log(lstArticles);
+    const itemsSection = document.getElementById('items');
+    createArticles(itemsSection);
 }
