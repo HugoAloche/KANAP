@@ -23,7 +23,7 @@ function initApp() {
     setColors(id, colors);
 
     submit.addEventListener('click', function() {
-        setStorage(id, colors.options[colors.selectedIndex].text, parseInt(qte.value));
+        setStorage(id, colors.options[colors.selectedIndex].text, parseInt(qte.value), parseInt(price.textContent), img.src, img.alt, title.textContent);
     })
 }
 
@@ -32,41 +32,42 @@ function initApp() {
  * @param {id} id 
  * @param {String} color 
  * @param {Int} qte 
+ * @param {Int} price 
  */
-function setStorage(id, color, qte) {
+function setStorage(id, color, qte, price, url, alt, name) {
     let exist = 0;
     if (storage.length > 0) {
         storage.forEach(article => {
-            // Tant qu'il a pas vérifier tout les article
             if (article.article_id === id) {
-                console.log("id exist");
                 if (article.article_color === color) {
-                    console.log("color exist");
                     exist = 1;
                     article.article_qte += qte;
                 }
             }
         });
         if (exist === 0) {
-            console.log("existe pas", exist);
-            addArticleToStorage(id, color, qte);
+            addArticleToStorage(id, color, qte, price, url, alt, name);
         }
     } else {
-        console.log("tableau était vide");
-        addArticleToStorage(id, color, qte);
+        addArticleToStorage(id, color, qte, price, url, alt, name);
     }
     console.log(storage);
-    localStorage.clear();
-    // localStorage.id = storage[0].article_id;
-    // localStorage.color = storage[0].article_color;
-    // localStorage.qte = storage[0].article_qte;
 }
 
-function addArticleToStorage(id, color, qte) {
+function addArticleToStorage(id, color, qte, price, url, alt, name) {
     let article = {
         article_id: id,
         article_color: color,
-        article_qte: qte
+        article_qte: qte,
+        article_price: price,
+        article_url: url,
+        article_alt: alt,
+        article_name: name
     };
     storage.push(article);
+
+    storage.forEach(function(article, index) {
+        localStorage.setItem('article' + index, JSON.stringify(article));
+    });
+    console.log(localStorage);
 }
