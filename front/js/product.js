@@ -37,29 +37,20 @@ function setStorage(id, color, qte) {
     let exist = 0;
     if (storage.length > 0) {
         storage.forEach(article => {
-            // Tant qu'il a pas vérifier tout les article
             if (article.article_id === id) {
-                console.log("id exist");
                 if (article.article_color === color) {
-                    console.log("color exist");
                     exist = 1;
                     article.article_qte += qte;
                 }
             }
         });
         if (exist === 0) {
-            console.log("existe pas", exist);
             addArticleToStorage(id, color, qte);
         }
     } else {
-        console.log("tableau était vide");
         addArticleToStorage(id, color, qte);
     }
-    console.log(storage);
-    localStorage.clear();
-    // localStorage.id = storage[0].article_id;
-    // localStorage.color = storage[0].article_color;
-    // localStorage.qte = storage[0].article_qte;
+    console.log(localStorage.getItem('article'));
 }
 
 function addArticleToStorage(id, color, qte) {
@@ -69,4 +60,5 @@ function addArticleToStorage(id, color, qte) {
         article_qte: qte
     };
     storage.push(article);
+    localStorage.article = JSON.stringify(article);
 }
