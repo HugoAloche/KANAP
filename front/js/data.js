@@ -54,6 +54,7 @@ export async function setTitle(id, h1) {
                     data.forEach(elem => {
                         if (elem._id === id) {
                             h1.innerHTML = elem.name;
+                            document.title = elem.name;
                         }
                     })
                 })

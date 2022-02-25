@@ -23,7 +23,7 @@ function initApp() {
     setColors(id, colors);
 
     submit.addEventListener('click', function() {
-        setStorage(id, colors.options[colors.selectedIndex].text, parseInt(qte.value));
+        setStorage(id, colors.options[colors.selectedIndex].text, parseInt(qte.value), parseInt(price.textContent), img.src, img.alt, title.textContent);
     })
 }
 
@@ -32,8 +32,9 @@ function initApp() {
  * @param {id} id 
  * @param {String} color 
  * @param {Int} qte 
+ * @param {Int} price 
  */
-function setStorage(id, color, qte) {
+function setStorage(id, color, qte, price, url, alt, name) {
     let exist = 0;
     if (storage.length > 0) {
         storage.forEach(article => {
@@ -45,20 +46,28 @@ function setStorage(id, color, qte) {
             }
         });
         if (exist === 0) {
-            addArticleToStorage(id, color, qte);
+            addArticleToStorage(id, color, qte, price, url, alt, name);
         }
     } else {
-        addArticleToStorage(id, color, qte);
+        addArticleToStorage(id, color, qte, price, url, alt, name);
     }
-    console.log(localStorage.getItem('article'));
+    console.log(storage);
 }
 
-function addArticleToStorage(id, color, qte) {
+function addArticleToStorage(id, color, qte, price, url, alt, name) {
     let article = {
         article_id: id,
         article_color: color,
-        article_qte: qte
+        article_qte: qte,
+        article_price: price,
+        article_url: url,
+        article_alt: alt,
+        article_name: name
     };
     storage.push(article);
-    localStorage.article = JSON.stringify(article);
+
+    storage.forEach(function(article, index) {
+        localStorage.setItem('article' + index, JSON.stringify(article));
+    });
+    console.log(localStorage);
 }
