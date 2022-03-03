@@ -1,8 +1,22 @@
 import { setImageUrl, setTitle, setPrice, setDescription, setColors } from './data.js';
 /* Une fois la page charger lance la fonction d'initialisation*/
 window.addEventListener('load', initApp);
-
 let storage = [];
+
+if (localStorage.length > 0) {
+    for (let i = 0; i < localStorage.length; i++) {
+        let article = {
+            article_id: JSON.parse(localStorage.getItem(`article${i}`)).article_id,
+            article_color: JSON.parse(localStorage.getItem(`article${i}`)).article_color,
+            article_qte: JSON.parse(localStorage.getItem(`article${i}`)).article_qte,
+            article_price: JSON.parse(localStorage.getItem(`article${i}`)).article_price,
+            article_url: JSON.parse(localStorage.getItem(`article${i}`)).article_url,
+            article_alt: JSON.parse(localStorage.getItem(`article${i}`)).article_alt,
+            article_name: JSON.parse(localStorage.getItem(`article${i}`)).article_name
+        };
+        storage.push(article);
+    }
+}
 
 function initApp() {
     const img = document.querySelector('#img');
@@ -37,11 +51,14 @@ function initApp() {
 function setStorage(id, color, qte, price, url, alt, name) {
     let exist = 0;
     if (storage.length > 0) {
-        storage.forEach(article => {
+        storage.forEach((article, index) => {
             if (article.article_id === id) {
                 if (article.article_color === color) {
                     exist = 1;
                     article.article_qte += qte;
+                    // localStorage.setItem(`article${index}`.article_qte, JSON.stringify(article.article_qte));
+                    // console.log(JSON.parse(localStorage.getItem(`article${index}`)).article_qte);
+                    console.log(localStorage);
                 }
             }
         });
@@ -51,7 +68,6 @@ function setStorage(id, color, qte, price, url, alt, name) {
     } else {
         addArticleToStorage(id, color, qte, price, url, alt, name);
     }
-    console.log(storage);
 }
 
 function addArticleToStorage(id, color, qte, price, url, alt, name) {
@@ -69,5 +85,4 @@ function addArticleToStorage(id, color, qte, price, url, alt, name) {
     storage.forEach(function(article, index) {
         localStorage.setItem('article' + index, JSON.stringify(article));
     });
-    console.log(localStorage);
 }

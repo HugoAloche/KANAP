@@ -3,6 +3,7 @@ window.addEventListener('load', initApp);
 
 function initApp() {
     const section = document.querySelector('#cart__items');
+    console.log(localStorage);
     // localStorage.clear();
 
     for (let i = 0; i < localStorage.length; i++) {
