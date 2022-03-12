@@ -4,6 +4,28 @@ window.addEventListener('load', initApp);
 
 let storage = [];
 
+if (localStorage.length > 0) {
+    for (let i = 0; i < localStorage.length; i++) {
+        let color = JSON.parse(localStorage.getItem(`article${i}`)).article_color;
+        let id = JSON.parse(localStorage.getItem(`article${i}`)).article_id;
+        let qte = JSON.parse(localStorage.getItem(`article${i}`)).article_qte;
+        let price = JSON.parse(localStorage.getItem(`article${i}`)).article_price;
+        let url = JSON.parse(localStorage.getItem(`article${i}`)).article_url;
+        let alt = JSON.parse(localStorage.getItem(`article${i}`)).article_alt;
+        let name = JSON.parse(localStorage.getItem(`article${i}`)).article_name;
+        let article = {
+            article_id: id,
+            article_color: color,
+            article_qte: qte,
+            article_price: price,
+            article_url: url,
+            article_alt: alt,
+            article_name: name
+        };
+        storage.push(article);
+    }
+}
+
 function initApp() {
     const img = document.querySelector('#img');
     const title = document.querySelector('#title');
@@ -37,21 +59,23 @@ function initApp() {
 function setStorage(id, color, qte, price, url, alt, name) {
     let exist = 0;
     if (storage.length > 0) {
-        storage.forEach(article => {
+        storage.forEach(function(article, index) {
             if (article.article_id === id) {
                 if (article.article_color === color) {
                     exist = 1;
-                    article.article_qte += qte;
+                    let newQte = article.article_qte += qte;
+                    updateArticleToStorage(index, newQte);
                 }
             }
         });
         if (exist === 0) {
+            console.log("Rajout dans le panier");
             addArticleToStorage(id, color, qte, price, url, alt, name);
         }
     } else {
+        console.log("Rien dans le panier");
         addArticleToStorage(id, color, qte, price, url, alt, name);
     }
-    console.log(storage);
 }
 
 function addArticleToStorage(id, color, qte, price, url, alt, name) {
@@ -69,5 +93,26 @@ function addArticleToStorage(id, color, qte, price, url, alt, name) {
     storage.forEach(function(article, index) {
         localStorage.setItem('article' + index, JSON.stringify(article));
     });
-    console.log(localStorage);
+}
+
+function updateArticleToStorage(pIndex, pQte) {
+    let color = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_color;
+    let id = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_id;
+    let price = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_price;
+    let url = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_url;
+    let alt = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_alt;
+    let name = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_name;
+
+    let article = {
+        article_id: id,
+        article_color: color,
+        article_qte: pQte,
+        article_price: price,
+        article_url: url,
+        article_alt: alt,
+        article_name: name
+    };
+
+    localStorage.setItem('article' + pIndex, JSON.stringify(article));
+
 }
