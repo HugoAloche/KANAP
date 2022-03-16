@@ -104,7 +104,6 @@ function updateArticleToStorage(pIndex, pQte) {
     };
 
     localStorage.setItem('article' + pIndex, JSON.stringify(article));
-
 }
 
 function firstIndex() {

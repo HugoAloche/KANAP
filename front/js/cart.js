@@ -84,6 +84,9 @@ function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName, pIndex) 
     number.min = 1;
     number.max = 100;
     number.value = pQte;
+    number.addEventListener('change', function() {
+        updateArticle(number, pIndex);
+    })
 
     h2.innerHTML = pName;
 
@@ -124,4 +127,26 @@ function deleteArticle(index) {
 
 function firstIndex() {
     return Object.keys(localStorage)[localStorage.length - 1].charAt(Object.keys(localStorage)[0].length - 1);
+}
+
+function updateArticle(input, pIndex) {
+    let color = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_color;
+    let id = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_id;
+    let price = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_price;
+    let url = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_url;
+    let alt = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_alt;
+    let name = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_name;
+
+    let article = {
+        article_id: id,
+        article_color: color,
+        article_qte: input.value,
+        article_price: price,
+        article_url: url,
+        article_alt: alt,
+        article_name: name
+    };
+
+    localStorage.setItem('article' + pIndex, JSON.stringify(article));
+    location.reload();
 }
