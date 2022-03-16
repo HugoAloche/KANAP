@@ -9,7 +9,8 @@ function initApp() {
     console.log(localStorage);
     if (localStorage.length > 0) {
         totalPrice.textContent = priceOf(localStorage);
-        for (let i = firstIndex(); 0 < localStorage.length; i++) {
+        let k = 0;
+        for (let i = firstIndex(); k < localStorage.length; k++) {
             let color = JSON.parse(localStorage.getItem(`article${i}`)).article_color;
             let qte = JSON.parse(localStorage.getItem(`article${i}`)).article_qte;
             let price = JSON.parse(localStorage.getItem(`article${i}`)).article_price;
@@ -17,6 +18,7 @@ function initApp() {
             let alt = JSON.parse(localStorage.getItem(`article${i}`)).article_alt;
             let name = JSON.parse(localStorage.getItem(`article${i}`)).article_name;
             showArticle(section, color, qte, price, url, alt, name, i);
+            i++;
         }
     }
 
@@ -104,8 +106,10 @@ function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName, pIndex) 
 function priceOf(pArray) {
     let sum = [];
     let price = 0;
-    for (let i = firstIndex(); 0 < pArray.length; i++) {
+    let k = 0;
+    for (let i = firstIndex(); k < pArray.length; k++) {
         sum.push(JSON.parse(pArray.getItem('article' + i)).article_price * JSON.parse(pArray.getItem('article' + i)).article_qte);
+        i++;
     }
     sum.forEach(val => {
         price += val;
