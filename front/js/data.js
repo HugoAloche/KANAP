@@ -105,7 +105,7 @@ export async function setDescription(id, p) {
 /**
  * Fonction qui définie les couleur d'un select donnée selon l'id d'un produit
  * @param {id} id 
- * @param {HTMLSelectElement} elect 
+ * @param {HTMLSelectElement} select 
  */
 export async function setColors(id, select) {
     fetch(url)
