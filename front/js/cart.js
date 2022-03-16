@@ -3,20 +3,37 @@ window.addEventListener('load', initApp);
 
 function initApp() {
     const section = document.querySelector('#cart__items');
-    // localStorage.clear();
-
-    for (let i = 0; i < localStorage.length; i++) {
-        let color = JSON.parse(localStorage.getItem(`article${i}`)).article_color;
-        let qte = JSON.parse(localStorage.getItem(`article${i}`)).article_qte;
-        let price = JSON.parse(localStorage.getItem(`article${i}`)).article_price;
-        let url = JSON.parse(localStorage.getItem(`article${i}`)).article_url;
-        let alt = JSON.parse(localStorage.getItem(`article${i}`)).article_alt;
-        let name = JSON.parse(localStorage.getItem(`article${i}`)).article_name;
-        showArticle(section, color, qte, price, url, alt, name);
+    const totalQuantity = document.getElementById('totalQuantity');
+    const totalPrice = document.getElementById('totalPrice');
+    totalQuantity.textContent = localStorage.length;
+    console.log(localStorage);
+    if (localStorage.length > 0) {
+        totalPrice.textContent = priceOf(localStorage);
+        for (let i = firstIndex(); 0 < localStorage.length; i++) {
+            let color = JSON.parse(localStorage.getItem(`article${i}`)).article_color;
+            let qte = JSON.parse(localStorage.getItem(`article${i}`)).article_qte;
+            let price = JSON.parse(localStorage.getItem(`article${i}`)).article_price;
+            let url = JSON.parse(localStorage.getItem(`article${i}`)).article_url;
+            let alt = JSON.parse(localStorage.getItem(`article${i}`)).article_alt;
+            let name = JSON.parse(localStorage.getItem(`article${i}`)).article_name;
+            showArticle(section, color, qte, price, url, alt, name, i);
+        }
     }
+
+    // localStorage.clear();
 }
 
-function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName) {
+/**
+ * Crée un article à partir d'élément du localstorage
+ * @param {section} pSection 
+ * @param {color} pColor 
+ * @param {Int16Array} pQte 
+ * @param {Int16Array} pPrice 
+ * @param {string} pURL 
+ * @param {string} pAlt 
+ * @param {string} pName 
+ */
+function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName, pIndex) {
     let cart__item__img = document.createElement('div');
     cart__item__img.classList.add('cart__item__img');
 
@@ -55,7 +72,9 @@ function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName) {
 
     let deletedText = document.createElement('p');
     deletedText.innerHTML = 'Supprimer';
-    deletedText.classList.add('deleteItem');
+    deletedText.addEventListener('click', function() {
+        deleteArticle(pIndex);
+    })
 
     let number = document.createElement('input');
     number.type = "number";
@@ -80,4 +99,24 @@ function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName) {
     quantity.appendChild(qte);
     quantity.appendChild(number);
     deleteted.appendChild(deletedText);
+}
+
+function priceOf(pArray) {
+    let sum = [];
+    let price = 0;
+    for (let i = firstIndex(); 0 < pArray.length; i++) {
+        sum.push(JSON.parse(pArray.getItem('article' + i)).article_price * JSON.parse(pArray.getItem('article' + i)).article_qte);
+    }
+    sum.forEach(val => {
+        price += val;
+    })
+    return price;
+}
+
+function deleteArticle(index) {
+    localStorage.removeItem('article' + index);
+}
+
+function firstIndex() {
+    return Object.keys(localStorage)[localStorage.length - 1].charAt(Object.keys(localStorage)[0].length - 1);
 }

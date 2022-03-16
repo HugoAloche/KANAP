@@ -4,7 +4,7 @@ window.addEventListener('load', initApp);
 let storage = [];
 
 if (localStorage.length > 0) {
-    for (let i = 0; i < localStorage.length; i++) {
+    for (let i = firstIndex(); i < localStorage.length; i++) {
         let article = {
             article_id: JSON.parse(localStorage.getItem(`article${i}`)).article_id,
             article_color: JSON.parse(localStorage.getItem(`article${i}`)).article_color,
@@ -105,4 +105,8 @@ function updateArticleToStorage(pIndex, pQte) {
 
     localStorage.setItem('article' + pIndex, JSON.stringify(article));
 
+}
+
+function firstIndex() {
+    return Object.keys(localStorage)[localStorage.length - 1].charAt(Object.keys(localStorage)[0].length - 1);
 }
