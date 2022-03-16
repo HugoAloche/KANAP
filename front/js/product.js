@@ -55,19 +55,15 @@ function setStorage(id, color, qte, price, url, alt, name) {
             if (article.article_id === id) {
                 if (article.article_color === color) {
                     exist = 1;
-                    article.article_qte += qte;
-                    // localStorage.setItem(`article${index}`.article_qte, JSON.stringify(article.article_qte));
-                    // console.log(JSON.parse(localStorage.getItem(`article${index}`)).article_qte);
-                    console.log(localStorage);
+                    let newQte = article.article_qte += qte;
+                    updateArticleToStorage(index, newQte);
                 }
             }
         });
         if (exist === 0) {
-            console.log("Rajout dans le panier");
             addArticleToStorage(id, color, qte, price, url, alt, name);
         }
     } else {
-        console.log("Rien dans le panier");
         addArticleToStorage(id, color, qte, price, url, alt, name);
     }
 }
@@ -87,4 +83,26 @@ function addArticleToStorage(id, color, qte, price, url, alt, name) {
     storage.forEach(function(article, index) {
         localStorage.setItem('article' + index, JSON.stringify(article));
     });
+}
+
+function updateArticleToStorage(pIndex, pQte) {
+    let color = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_color;
+    let id = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_id;
+    let price = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_price;
+    let url = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_url;
+    let alt = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_alt;
+    let name = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_name;
+
+    let article = {
+        article_id: id,
+        article_color: color,
+        article_qte: pQte,
+        article_price: price,
+        article_url: url,
+        article_alt: alt,
+        article_name: name
+    };
+
+    localStorage.setItem('article' + pIndex, JSON.stringify(article));
+
 }
