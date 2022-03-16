@@ -3,10 +3,13 @@ window.addEventListener('load', initApp);
 
 function initApp() {
     const section = document.querySelector('#cart__items');
+    const form = document.querySelector('.cart__order__form');
     const totalQuantity = document.getElementById('totalQuantity');
     const totalPrice = document.getElementById('totalPrice');
+    form.addEventListener('submit', function(event) {
+        checkForm(event);
+    })
     totalQuantity.textContent = localStorage.length;
-    console.log(localStorage);
     if (localStorage.length > 0) {
         totalPrice.textContent = priceOf(localStorage);
         let k = 0;
@@ -149,4 +152,16 @@ function updateArticle(input, pIndex) {
 
     localStorage.setItem('article' + pIndex, JSON.stringify(article));
     location.reload();
+}
+
+function checkForm(event) {
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const addrRegex = /^([0-9]*) ?([a-zA-Z,\. ]*) ?([0-9]{5}) ?([a-zA-Z]*)$/;
+    if (!emailRegex.test(document.getElementById('email').value)) {
+        event.preventDefault();
+        document.getElementById('emailErrorMsg').textContent = "Votre email n'est pas valide.";
+    } else if (!addrRegex.test(document.getElementById('address').value)) {
+        event.preventDefault();
+        document.getElementById('addressErrorMsg').textContent = "Votre adresse n'est pas valide.";
+    }
 }
