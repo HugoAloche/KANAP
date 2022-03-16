@@ -5,6 +5,7 @@ function initApp() {
     const section = document.querySelector('#cart__items');
     console.log(localStorage);
     // localStorage.clear();
+    console.log(localStorage);
 
     for (let i = 0; i < localStorage.length; i++) {
         let color = JSON.parse(localStorage.getItem(`article${i}`)).article_color;

@@ -63,9 +63,11 @@ function setStorage(id, color, qte, price, url, alt, name) {
             }
         });
         if (exist === 0) {
+            console.log("Rajout dans le panier");
             addArticleToStorage(id, color, qte, price, url, alt, name);
         }
     } else {
+        console.log("Rien dans le panier");
         addArticleToStorage(id, color, qte, price, url, alt, name);
     }
 }
