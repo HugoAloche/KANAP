@@ -119,6 +119,7 @@ function priceOf(pArray) {
 
 function deleteArticle(index) {
     localStorage.removeItem('article' + index);
+    location.reload();
 }
 
 function firstIndex() {
