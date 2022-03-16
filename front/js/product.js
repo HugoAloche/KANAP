@@ -51,7 +51,7 @@ function initApp() {
 function setStorage(id, color, qte, price, url, alt, name) {
     let exist = 0;
     if (storage.length > 0) {
-        storage.forEach((article) => {
+        storage.forEach(function(article, index) {
             if (article.article_id === id) {
                 if (article.article_color === color) {
                     exist = 1;
