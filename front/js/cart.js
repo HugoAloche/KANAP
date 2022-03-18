@@ -2,6 +2,7 @@
 window.addEventListener('load', initApp);
 
 function initApp() {
+    // localStorage.clear();
     const section = document.querySelector('#cart__items');
     const form = document.querySelector('.cart__order__form');
     const totalQuantity = document.getElementById('totalQuantity');
@@ -24,8 +25,6 @@ function initApp() {
             i++;
         }
     }
-
-    // localStorage.clear();
 }
 
 /**
