@@ -4,17 +4,19 @@ window.addEventListener('load', initApp);
 let storage = [];
 
 if (localStorage.length > 0) {
-    for (let i = firstIndex(); i < localStorage.length; i++) {
-        let article = {
-            article_id: JSON.parse(localStorage.getItem(`article${i}`)).article_id,
-            article_color: JSON.parse(localStorage.getItem(`article${i}`)).article_color,
-            article_qte: JSON.parse(localStorage.getItem(`article${i}`)).article_qte,
-            article_price: JSON.parse(localStorage.getItem(`article${i}`)).article_price,
-            article_url: JSON.parse(localStorage.getItem(`article${i}`)).article_url,
-            article_alt: JSON.parse(localStorage.getItem(`article${i}`)).article_alt,
-            article_name: JSON.parse(localStorage.getItem(`article${i}`)).article_name
-        };
-        storage.push(article);
+    for (var key in localStorage) {
+        if (key.includes('article')) {
+            let article = {
+                article_id: JSON.parse(localStorage.getItem(key)).article_id,
+                article_color: JSON.parse(localStorage.getItem(key)).article_color,
+                article_qte: JSON.parse(localStorage.getItem(key)).article_qte,
+                article_price: JSON.parse(localStorage.getItem(key)).article_price,
+                article_url: JSON.parse(localStorage.getItem(key)).article_url,
+                article_alt: JSON.parse(localStorage.getItem(key)).article_alt,
+                article_name: JSON.parse(localStorage.getItem(key)).article_name
+            };
+            storage.push(article);
+        }
     }
 }
 

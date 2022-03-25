@@ -13,16 +13,18 @@ function initApp() {
     totalQuantity.textContent = localStorage.length;
     if (localStorage.length > 0) {
         totalPrice.textContent = priceOf(localStorage);
-        let k = 0;
-        for (let i = firstIndex(); k < localStorage.length; k++) {
-            let color = JSON.parse(localStorage.getItem(`article${i}`)).article_color;
-            let qte = JSON.parse(localStorage.getItem(`article${i}`)).article_qte;
-            let price = JSON.parse(localStorage.getItem(`article${i}`)).article_price;
-            let url = JSON.parse(localStorage.getItem(`article${i}`)).article_url;
-            let alt = JSON.parse(localStorage.getItem(`article${i}`)).article_alt;
-            let name = JSON.parse(localStorage.getItem(`article${i}`)).article_name;
-            showArticle(section, color, qte, price, url, alt, name, i);
-            i++;
+        let i = 0;
+        for (var key in localStorage) {
+            if (key.includes('article')) {
+                let color = JSON.parse(localStorage.getItem(key)).article_color;
+                let qte = JSON.parse(localStorage.getItem(key)).article_qte;
+                let price = JSON.parse(localStorage.getItem(key)).article_price;
+                let url = JSON.parse(localStorage.getItem(key)).article_url;
+                let alt = JSON.parse(localStorage.getItem(key)).article_alt;
+                let name = JSON.parse(localStorage.getItem(key)).article_name;
+                showArticle(section, color, qte, price, url, alt, name, i);
+                i++;
+            }
         }
     }
 }
@@ -111,10 +113,12 @@ function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName, pIndex) 
 function priceOf(pArray) {
     let sum = [];
     let price = 0;
-    let k = 0;
-    for (let i = firstIndex(); k < pArray.length; k++) {
-        sum.push(JSON.parse(pArray.getItem('article' + i)).article_price * JSON.parse(pArray.getItem('article' + i)).article_qte);
-        i++;
+    console.log(firstIndex());
+
+    for (var key in localStorage) {
+        if (key.includes('article')) {
+            sum.push(JSON.parse(pArray.getItem(key)).article_price * JSON.parse(pArray.getItem(key)).article_qte);
+        }
     }
     sum.forEach(val => {
         price += val;
@@ -165,10 +169,11 @@ function checkForm(event) {
     } else {
         event.preventDefault();
         let productsId = [];
-        let k = 0;
-        for (let i = firstIndex(); k < localStorage.length; k++) {
-            productsId.push(JSON.parse(localStorage.getItem(`article${i}`)).article_id);
-            i++;
+
+        for (var key in localStorage) {
+            if (key.includes('article')) {
+                productsId.push(JSON.parse(localStorage.getItem(key)).article_id);
+            }
         }
         let fetchData = {
             method: 'POST',
