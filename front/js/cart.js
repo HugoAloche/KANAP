@@ -162,5 +162,37 @@ function checkForm(event) {
     } else if (!addrRegex.test(document.getElementById('address').value)) {
         event.preventDefault();
         document.getElementById('addressErrorMsg').textContent = "Votre adresse n'est pas valide.";
+    } else {
+        event.preventDefault();
+        let productsId = [];
+        let k = 0;
+        for (let i = firstIndex(); k < localStorage.length; k++) {
+            productsId.push(JSON.parse(localStorage.getItem(`article${i}`)).article_id);
+            i++;
+        }
+        let fetchData = {
+            method: 'POST',
+            body: JSON.stringify({
+                contact: {
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    email: document.getElementById('email').value,
+                },
+                products: productsId
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        }
+        makeOrder(fetchData);
     }
+}
+
+function makeOrder(data) {
+    const url = 'http://localhost:3000/api/products/order';
+    return fetch(url, data)
+        .then((res) => res.json())
+        .then((id) => {
+            location.href = "/front/html/confirmation.html?id=" + id.orderId;
+        })
 }
