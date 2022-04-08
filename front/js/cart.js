@@ -13,7 +13,7 @@ function initApp() {
     totalQuantity.textContent = localStorage.length;
     if (localStorage.length > 0) {
         totalPrice.textContent = priceOf(localStorage);
-        let i = 0;
+        let i = localStorage.length - 1;
         for (var key in localStorage) {
             if (key.includes('article')) {
                 let color = JSON.parse(localStorage.getItem(key)).article_color;
@@ -23,7 +23,7 @@ function initApp() {
                 let alt = JSON.parse(localStorage.getItem(key)).article_alt;
                 let name = JSON.parse(localStorage.getItem(key)).article_name;
                 showArticle(section, color, qte, price, url, alt, name, i);
-                i++;
+                i--;
             }
         }
     }
@@ -113,7 +113,6 @@ function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName, pIndex) 
 function priceOf(pArray) {
     let sum = [];
     let price = 0;
-    console.log(firstIndex());
 
     for (var key in localStorage) {
         if (key.includes('article')) {
@@ -167,29 +166,34 @@ function checkForm(event) {
         event.preventDefault();
         document.getElementById('addressErrorMsg').textContent = "Votre adresse n'est pas valide.";
     } else {
-        event.preventDefault();
-        let productsId = [];
+        if (localStorage.length > 0) {
+            event.preventDefault();
+            let productsId = [];
 
-        for (var key in localStorage) {
-            if (key.includes('article')) {
-                productsId.push(JSON.parse(localStorage.getItem(key)).article_id);
+            for (var key in localStorage) {
+                if (key.includes('article')) {
+                    productsId.push(JSON.parse(localStorage.getItem(key)).article_id);
+                }
             }
+            let fetchData = {
+                method: 'POST',
+                body: JSON.stringify({
+                    contact: {
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        address: document.getElementById('address').value,
+                        city: document.getElementById('city').value,
+                        email: document.getElementById('email').value,
+                    },
+                    products: productsId
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            }
+            makeOrder(fetchData);
+        } else {
+            event.preventDefault();
+            document.getElementById('cartErrorMsg').textContent = "Votre panier est vide.";
         }
-        let fetchData = {
-            method: 'POST',
-            body: JSON.stringify({
-                contact: {
-                    firstName: document.getElementById('firstName').value,
-                    lastName: document.getElementById('lastName').value,
-                    address: document.getElementById('address').value,
-                    city: document.getElementById('city').value,
-                    email: document.getElementById('email').value,
-                },
-                products: productsId
-            }),
-            headers: { 'Content-Type': 'application/json' }
-        }
-        makeOrder(fetchData);
     }
 }
 
