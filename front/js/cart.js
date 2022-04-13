@@ -14,16 +14,15 @@ async function initApp() {
     if (localStorage.length > 0) {
         totalPrice.textContent = await priceOf(localStorage);
         totalQuantity.textContent = sumOfArticle();
-        let i = localStorage.length - 1;
         for (var key in localStorage) {
             if (key.includes('article')) {
+                console.log();
                 let color = JSON.parse(localStorage.getItem(key)).article_color;
                 let qte = JSON.parse(localStorage.getItem(key)).article_qte;
                 let url = JSON.parse(localStorage.getItem(key)).article_url;
                 let alt = JSON.parse(localStorage.getItem(key)).article_alt;
                 let name = JSON.parse(localStorage.getItem(key)).article_name;
-                showArticle(section, color, qte, url, alt, name, i);
-                i--;
+                showArticle(section, color, qte, url, alt, name, key.slice(-1));
             }
         }
     }
