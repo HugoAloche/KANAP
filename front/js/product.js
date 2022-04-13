@@ -10,7 +10,6 @@ if (localStorage.length > 0) {
                 article_id: JSON.parse(localStorage.getItem(key)).article_id,
                 article_color: JSON.parse(localStorage.getItem(key)).article_color,
                 article_qte: JSON.parse(localStorage.getItem(key)).article_qte,
-                article_price: JSON.parse(localStorage.getItem(key)).article_price,
                 article_url: JSON.parse(localStorage.getItem(key)).article_url,
                 article_alt: JSON.parse(localStorage.getItem(key)).article_alt,
                 article_name: JSON.parse(localStorage.getItem(key)).article_name
@@ -39,7 +38,7 @@ function initApp() {
     setColors(id, colors);
 
     submit.addEventListener('click', function() {
-        setStorage(id, colors.options[colors.selectedIndex].text, parseInt(qte.value), parseInt(price.textContent), img.src, img.alt, title.textContent);
+        setStorage(id, colors.options[colors.selectedIndex].text, parseInt(qte.value), img.src, img.alt, title.textContent);
     })
 }
 
@@ -47,10 +46,9 @@ function initApp() {
  * Fonction qui va enregistrée un article si il n'existe pas déjà
  * @param {id} id 
  * @param {String} color 
- * @param {Int} qte 
- * @param {Int} price 
+ * @param {Int} qte
  */
-function setStorage(id, color, qte, price, url, alt, name) {
+function setStorage(id, color, qte, url, alt, name) {
     let exist = 0;
     if (storage.length > 0) {
         storage.forEach(function(article, index) {
@@ -63,19 +61,18 @@ function setStorage(id, color, qte, price, url, alt, name) {
             }
         });
         if (exist === 0) {
-            addArticleToStorage(id, color, qte, price, url, alt, name);
+            addArticleToStorage(id, color, qte, url, alt, name);
         }
     } else {
-        addArticleToStorage(id, color, qte, price, url, alt, name);
+        addArticleToStorage(id, color, qte, url, alt, name);
     }
 }
 
-function addArticleToStorage(id, color, qte, price, url, alt, name) {
+function addArticleToStorage(id, color, qte, url, alt, name) {
     let article = {
         article_id: id,
         article_color: color,
         article_qte: qte,
-        article_price: price,
         article_url: url,
         article_alt: alt,
         article_name: name
@@ -90,7 +87,6 @@ function addArticleToStorage(id, color, qte, price, url, alt, name) {
 function updateArticleToStorage(pIndex, pQte) {
     let color = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_color;
     let id = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_id;
-    let price = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_price;
     let url = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_url;
     let alt = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_alt;
     let name = JSON.parse(localStorage.getItem(`article${pIndex}`)).article_name;
@@ -99,15 +95,10 @@ function updateArticleToStorage(pIndex, pQte) {
         article_id: id,
         article_color: color,
         article_qte: pQte,
-        article_price: price,
         article_url: url,
         article_alt: alt,
         article_name: name
     };
 
     localStorage.setItem('article' + pIndex, JSON.stringify(article));
-}
-
-function firstIndex() {
-    return Object.keys(localStorage)[localStorage.length - 1].charAt(Object.keys(localStorage)[0].length - 1);
 }

@@ -1,9 +1,9 @@
+import { setPrice } from '../js/data.js'
 /* Une fois la page charger lance la fonction d'initialisation*/
 window.addEventListener('load', initApp);
 
-function initApp() {
+async function initApp() {
     // localStorage.clear();
-    // console.log(localStorage);
     const section = document.querySelector('#cart__items');
     const form = document.querySelector('.cart__order__form');
     const totalQuantity = document.getElementById('totalQuantity');
@@ -11,19 +11,18 @@ function initApp() {
     form.addEventListener('submit', function(event) {
         checkForm(event);
     })
-    totalQuantity.textContent = localStorage.length;
     if (localStorage.length > 0) {
-        totalPrice.textContent = priceOf(localStorage);
+        totalPrice.textContent = await priceOf(localStorage);
+        totalQuantity.textContent = sumOfArticle();
         let i = localStorage.length - 1;
         for (var key in localStorage) {
             if (key.includes('article')) {
                 let color = JSON.parse(localStorage.getItem(key)).article_color;
                 let qte = JSON.parse(localStorage.getItem(key)).article_qte;
-                let price = JSON.parse(localStorage.getItem(key)).article_price;
                 let url = JSON.parse(localStorage.getItem(key)).article_url;
                 let alt = JSON.parse(localStorage.getItem(key)).article_alt;
                 let name = JSON.parse(localStorage.getItem(key)).article_name;
-                showArticle(section, color, qte, price, url, alt, name, i);
+                showArticle(section, color, qte, url, alt, name, i);
                 i--;
             }
         }
@@ -34,13 +33,12 @@ function initApp() {
  * Crée un article à partir d'élément du localstorage
  * @param {section} pSection 
  * @param {color} pColor 
- * @param {Int16Array} pQte 
- * @param {Int16Array} pPrice 
+ * @param {Int16Array} pQte
  * @param {string} pURL 
  * @param {string} pAlt 
  * @param {string} pName 
  */
-function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName, pIndex) {
+function showArticle(pSection, pColor, pQte, pURL, pAlt, pName, pIndex) {
     let cart__item__img = document.createElement('div');
     cart__item__img.classList.add('cart__item__img');
 
@@ -72,7 +70,8 @@ function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName, pIndex) 
     color.innerHTML = pColor;
 
     let price = document.createElement('p');
-    price.innerHTML = pPrice + ' €';
+    price.classList.add('price')
+    setPrice(JSON.parse(localStorage.getItem('article' + pIndex)).article_id, price);
 
     let qte = document.createElement('p');
     qte.innerHTML = 'Qté : ';
@@ -111,28 +110,25 @@ function showArticle(pSection, pColor, pQte, pPrice, pURL, pAlt, pName, pIndex) 
     deleteted.appendChild(deletedText);
 }
 
-function priceOf(pArray) {
-    let sum = [];
+async function priceOf(pArray) {
+    let response = await fetch('http://localhost:3000/api/products')
+    let products = await response.json();
+    // console.log(products);
     let price = 0;
-
     for (var key in localStorage) {
         if (key.includes('article')) {
-            sum.push(JSON.parse(pArray.getItem(key)).article_price * JSON.parse(pArray.getItem(key)).article_qte);
+            let id = JSON.parse(pArray.getItem(key)).article_id;
+            let qte = JSON.parse(pArray.getItem(key)).article_qte;
+            let product = products.find(prod => prod._id == id);
+            price += product.price * qte;
         }
     }
-    sum.forEach(val => {
-        price += val;
-    })
     return price;
 }
 
 function deleteArticle(index) {
     localStorage.removeItem('article' + index);
     location.reload();
-}
-
-function firstIndex() {
-    return Object.keys(localStorage)[localStorage.length - 1].charAt(Object.keys(localStorage)[0].length - 1);
 }
 
 function updateArticle(input, pIndex) {
@@ -200,9 +196,19 @@ function checkForm(event) {
 
 function makeOrder(data) {
     const url = 'http://localhost:3000/api/products/order';
-    return fetch(url, data)
+    fetch(url, data)
         .then((res) => res.json())
         .then((id) => {
             location.href = "/front/html/confirmation.html?id=" + id.orderId;
         })
+}
+
+function sumOfArticle() {
+    let qte = 0;
+    for (let key in localStorage) {
+        if (key.includes('article')) {
+            qte += parseInt(JSON.parse(localStorage.getItem(key)).article_qte);
+        }
+    }
+    return qte;
 }
