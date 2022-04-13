@@ -16,7 +16,6 @@ async function initApp() {
         totalQuantity.textContent = sumOfArticle();
         for (var key in localStorage) {
             if (key.includes('article')) {
-                console.log();
                 let color = JSON.parse(localStorage.getItem(key)).article_color;
                 let qte = JSON.parse(localStorage.getItem(key)).article_qte;
                 let url = JSON.parse(localStorage.getItem(key)).article_url;
